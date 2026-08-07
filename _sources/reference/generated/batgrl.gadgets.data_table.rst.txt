@@ -1,0 +1,21 @@
+batgrl.gadgets.data\_table
+==========================
+
+.. automodule:: batgrl.gadgets.data_table
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ColumnStyle
+      DataTable
+      SupportsLessThan
+      _CellBase
+      _ColumnLabel
+      _ColumnLabels
+      _DataCell
+      _DataCells
+      _FauxPane
+      _SortState
+   

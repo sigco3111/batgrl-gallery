@@ -1,0 +1,24 @@
+batgrl.gadgets.graphics
+=======================
+
+.. automodule:: batgrl.gadgets.graphics
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      Blitter
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      scale_geometry
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Graphics
+   

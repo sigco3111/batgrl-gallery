@@ -1,0 +1,12 @@
+batgrl.gadgets.cursor
+=====================
+
+.. automodule:: batgrl.gadgets.cursor
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Cursor
+   

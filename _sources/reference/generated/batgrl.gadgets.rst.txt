@@ -1,0 +1,56 @@
+﻿batgrl.gadgets
+==============
+
+.. automodule:: batgrl.gadgets
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   animation
+   ans_viewer
+   bar_chart
+   behaviors
+   button
+   color_picker
+   console
+   cursor
+   data_table
+   digital_display
+   file_chooser
+   flat_toggle
+   gadget
+   graphic_field
+   graphics
+   grid_layout
+   image
+   line_plot
+   markdown
+   menu
+   pane
+   parallax
+   progress_bar
+   raycaster
+   recycle_view
+   scroll_view
+   shadow_caster
+   slider
+   sparkline
+   split_layout
+   stack_layout
+   tabs
+   text
+   text_animation
+   text_effects
+   text_field
+   text_pad
+   text_raycaster
+   textbox
+   tiled
+   toggle_button
+   tree_view
+   video
+   window

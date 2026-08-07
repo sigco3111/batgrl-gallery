@@ -1,0 +1,13 @@
+batgrl.gadgets.ans\_viewer
+==========================
+
+.. automodule:: batgrl.gadgets.ans_viewer
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AnsViewer
+      _AnsReader
+   

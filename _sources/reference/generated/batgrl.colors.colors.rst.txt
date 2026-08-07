@@ -1,0 +1,31 @@
+batgrl.colors.colors
+====================
+
+.. automodule:: batgrl.colors.colors
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      WHITE
+      BLACK
+      RED
+      GREEN
+      BLUE
+      YELLOW
+      CYAN
+      MAGENTA
+      AWHITE
+      ABLACK
+      ARED
+      AGREEN
+      ABLUE
+      AYELLOW
+      ACYAN
+      AMAGENTA
+      TRANSPARENT
+      NEPTUNE_THEME
+      NEPTUNE_PRIMARY_FG
+      NEPTUNE_PRIMARY_BG
+   

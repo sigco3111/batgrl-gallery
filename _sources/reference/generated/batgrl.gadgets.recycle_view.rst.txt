@@ -1,0 +1,12 @@
+batgrl.gadgets.recycle\_view
+============================
+
+.. automodule:: batgrl.gadgets.recycle_view
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      RecycleView
+   

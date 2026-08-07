@@ -1,0 +1,26 @@
+﻿batgrl.logging
+==============
+
+.. automodule:: batgrl.logging
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      ANSI_LEVEL
+      EVENTS_LEVEL
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_logger
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CustomLogger
+      LogLevel
+   

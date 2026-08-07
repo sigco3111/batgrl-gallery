@@ -1,0 +1,12 @@
+batgrl.gadgets.graphic\_field
+=============================
+
+.. automodule:: batgrl.gadgets.graphic_field
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GraphicParticleField
+   

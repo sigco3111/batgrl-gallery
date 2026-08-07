@@ -1,0 +1,31 @@
+batgrl.gadgets.gadget
+=====================
+
+.. automodule:: batgrl.gadgets.gadget
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      Anchor
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      _normalize_pos_hint
+      _normalize_size_hint
+      bindable
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Gadget
+      PosHint
+      SizeHint
+      TotalPosHint
+      TotalSizeHint
+      _GadgetList
+   

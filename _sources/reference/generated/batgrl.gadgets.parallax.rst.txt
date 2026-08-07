@@ -1,0 +1,12 @@
+batgrl.gadgets.parallax
+=======================
+
+.. automodule:: batgrl.gadgets.parallax
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Parallax
+   

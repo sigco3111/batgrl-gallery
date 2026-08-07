@@ -1,0 +1,30 @@
+batgrl.colors.color\_types
+==========================
+
+.. automodule:: batgrl.colors.color_types
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      Hexcode
+      AHexcode
+      ColorTheme
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      _to_hex
+      validate_ahexcode
+      validate_hexcode
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AColor
+      Color
+      SyntaxHighlightTheme
+   

@@ -1,0 +1,24 @@
+batgrl.gadgets.shadow\_caster
+=============================
+
+.. automodule:: batgrl.gadgets.shadow_caster
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      Restrictiveness
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      default_light_decay
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ShadowCaster
+   

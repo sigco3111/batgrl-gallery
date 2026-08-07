@@ -1,0 +1,25 @@
+batgrl.gadgets.text
+===================
+
+.. automodule:: batgrl.gadgets.text
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      Border
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      _fill_array
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Text
+      _InjectionRange
+   

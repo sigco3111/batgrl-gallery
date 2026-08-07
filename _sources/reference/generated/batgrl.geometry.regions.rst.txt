@@ -1,0 +1,19 @@
+batgrl.geometry.regions
+=======================
+
+.. automodule:: batgrl.geometry.regions
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      __reduce_cython__
+      __setstate_cython__
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Region
+   

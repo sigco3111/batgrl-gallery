@@ -1,0 +1,15 @@
+batgrl.gadgets.textbox
+======================
+
+.. automodule:: batgrl.gadgets.textbox
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Textbox
+      _Box
+      _TextEdit
+      _TextSelection
+   

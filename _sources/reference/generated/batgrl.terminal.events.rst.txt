@@ -1,0 +1,33 @@
+﻿batgrl.terminal.events
+======================
+
+.. automodule:: batgrl.terminal.events
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      SpecialKey
+      CharKey
+      Key
+      MouseButton
+      MouseEventType
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ColorReportEvent
+      CursorPositionReportEvent
+      DECReplyModeEvent
+      DeviceAttributesReportEvent
+      Event
+      FocusEvent
+      KeyEvent
+      MouseEvent
+      PasteEvent
+      PixelGeometryReportEvent
+      ResizeEvent
+      UnknownEscapeSequence
+   

@@ -1,0 +1,33 @@
+﻿batgrl.array\_types
+===================
+
+.. automodule:: batgrl.array_types
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      cell_dtype
+      braille_pixel_dtype
+      Cell
+      Cell0D
+      Cell1D
+      Cell2D
+      Float1D
+      Float2D
+      Coords
+      Int1D
+      Int2D
+      UInt32_2D
+      ULong1D
+      ULong2D
+      RGB_1D
+      RGB_2D
+      RGBA_1D
+      RGBA_2D
+      Unicode1D
+      Unicode2D
+      Enum2D
+      RGBM_2D
+   

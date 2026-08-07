@@ -1,0 +1,21 @@
+batgrl.gadgets.text\_pad
+========================
+
+.. automodule:: batgrl.gadgets.text_pad
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      EMPTY_LINE_CHARACTER
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      TextPad
+      _TextEdit
+      _TextSelection
+      _TreeEdit
+   

@@ -1,0 +1,27 @@
+﻿batgrl.queries
+==============
+
+.. automodule:: batgrl.queries
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      TSPoint
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      _find_tree_sitter_language
+      changed_ranges_point_range
+      get_highlighter
+      register_language
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Highlighter
+   

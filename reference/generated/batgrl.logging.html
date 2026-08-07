@@ -1,0 +1,922 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>batgrl.logging &#8212; batgrl 0.51.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../_static/documentation_options.js?v=8f531518"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/generated/batgrl.logging';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="batgrl.queries" href="batgrl.queries.html" />
+    <link rel="prev" title="batgrl.geometry.regions" href="batgrl.geometry.regions.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">batgrl 0.51.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/salt-die/batgrl" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/salt-die/batgrl" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="batgrl.app.html">batgrl.app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batgrl.array_types.html">batgrl.array_types</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="batgrl.colors.html">batgrl.colors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.colors.color_types.html">batgrl.colors.color_types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.colors.colors.html">batgrl.colors.colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.colors.gradients.html">batgrl.colors.gradients</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="batgrl.figfont.html">batgrl.figfont</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="batgrl.gadgets.html">batgrl.gadgets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.animation.html">batgrl.gadgets.animation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.ans_viewer.html">batgrl.gadgets.ans_viewer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.bar_chart.html">batgrl.gadgets.bar_chart</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="batgrl.gadgets.behaviors.html">batgrl.gadgets.behaviors</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.behaviors.button_behavior.html">batgrl.gadgets.behaviors.button_behavior</a></li>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.behaviors.focusable.html">batgrl.gadgets.behaviors.focusable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.behaviors.grabbable.html">batgrl.gadgets.behaviors.grabbable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.behaviors.movable.html">batgrl.gadgets.behaviors.movable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.behaviors.movable_children.html">batgrl.gadgets.behaviors.movable_children</a></li>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.behaviors.themable.html">batgrl.gadgets.behaviors.themable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.behaviors.toggle_button_behavior.html">batgrl.gadgets.behaviors.toggle_button_behavior</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.button.html">batgrl.gadgets.button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.color_picker.html">batgrl.gadgets.color_picker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.console.html">batgrl.gadgets.console</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.cursor.html">batgrl.gadgets.cursor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.data_table.html">batgrl.gadgets.data_table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.digital_display.html">batgrl.gadgets.digital_display</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.file_chooser.html">batgrl.gadgets.file_chooser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.flat_toggle.html">batgrl.gadgets.flat_toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.gadget.html">batgrl.gadgets.gadget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.graphic_field.html">batgrl.gadgets.graphic_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.graphics.html">batgrl.gadgets.graphics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.grid_layout.html">batgrl.gadgets.grid_layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.image.html">batgrl.gadgets.image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.line_plot.html">batgrl.gadgets.line_plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.markdown.html">batgrl.gadgets.markdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.menu.html">batgrl.gadgets.menu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.pane.html">batgrl.gadgets.pane</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.parallax.html">batgrl.gadgets.parallax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.progress_bar.html">batgrl.gadgets.progress_bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.raycaster.html">batgrl.gadgets.raycaster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.recycle_view.html">batgrl.gadgets.recycle_view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.scroll_view.html">batgrl.gadgets.scroll_view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.shadow_caster.html">batgrl.gadgets.shadow_caster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.slider.html">batgrl.gadgets.slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.sparkline.html">batgrl.gadgets.sparkline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.split_layout.html">batgrl.gadgets.split_layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.stack_layout.html">batgrl.gadgets.stack_layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.tabs.html">batgrl.gadgets.tabs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.text.html">batgrl.gadgets.text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.text_animation.html">batgrl.gadgets.text_animation</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="batgrl.gadgets.text_effects.html">batgrl.gadgets.text_effects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.text_effects.beams.html">batgrl.gadgets.text_effects.beams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.text_effects.black_hole.html">batgrl.gadgets.text_effects.black_hole</a></li>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.text_effects.ring.html">batgrl.gadgets.text_effects.ring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="batgrl.gadgets.text_effects.spotlights.html">batgrl.gadgets.text_effects.spotlights</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.text_field.html">batgrl.gadgets.text_field</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.text_pad.html">batgrl.gadgets.text_pad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.text_raycaster.html">batgrl.gadgets.text_raycaster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.textbox.html">batgrl.gadgets.textbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.tiled.html">batgrl.gadgets.tiled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.toggle_button.html">batgrl.gadgets.toggle_button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.tree_view.html">batgrl.gadgets.tree_view</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.video.html">batgrl.gadgets.video</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.gadgets.window.html">batgrl.gadgets.window</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="batgrl.geometry.html">batgrl.geometry</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.geometry.basic.html">batgrl.geometry.basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.geometry.easings.html">batgrl.geometry.easings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.geometry.motion.html">batgrl.geometry.motion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batgrl.geometry.regions.html">batgrl.geometry.regions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">batgrl.logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batgrl.queries.html">batgrl.queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batgrl.terminal.events.html">batgrl.terminal.events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batgrl.text_tools.html">batgrl.text_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="batgrl.texture_tools.html">batgrl.texture_tools</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">batgrl Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">batgrl.logging</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-batgrl.logging">
+<span id="batgrl-logging"></span><h1>batgrl.logging<a class="headerlink" href="#module-batgrl.logging" title="Link to this heading">#</a></h1>
+<p>Logging related classes and functions.</p>
+<p>Because default logging opens stdout/stderr which disables batgrl output, logging must
+be setup with a file handler instead. To ensure a file handler has been added, all
+library logging should use <code class="docutils literal notranslate"><span class="pre">get_logger</span></code> (essentially, just an alias of stdlib
+<code class="docutils literal notranslate"><span class="pre">logging.getLogger</span></code>) from this module.</p>
+<p>Additional log levels, <code class="docutils literal notranslate"><span class="pre">ANSI</span></code> and <code class="docutils literal notranslate"><span class="pre">EVENTS</span></code>, are added to standard logging levels.</p>
+<p class="rubric">Module Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#batgrl.logging.ANSI_LEVEL" title="batgrl.logging.ANSI_LEVEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ANSI_LEVEL</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ANSI</span></code> log level.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#batgrl.logging.EVENTS_LEVEL" title="batgrl.logging.EVENTS_LEVEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EVENTS_LEVEL</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EVENTS</span></code> log level.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Functions</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#batgrl.logging.get_logger" title="batgrl.logging.get_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_logger</span></code></a>([name])</p></td>
+<td><p>Return a logger with a specified name.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">Classes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#batgrl.logging.CustomLogger" title="batgrl.logging.CustomLogger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomLogger</span></code></a>(name[, level])</p></td>
+<td><p>A standard logger with methods for <code class="docutils literal notranslate"><span class="pre">ANSI</span></code> and <code class="docutils literal notranslate"><span class="pre">EVENTS</span></code> logging.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#batgrl.logging.LogLevel" title="batgrl.logging.LogLevel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LogLevel</span></code></a>(*values)</p></td>
+<td><p>Standard logging levels with additional <code class="docutils literal notranslate"><span class="pre">ANSI</span></code> and <code class="docutils literal notranslate"><span class="pre">EVENTS</span></code> levels.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="batgrl.logging.ANSI_LEVEL">
+<span class="sig-prename descclassname"><span class="pre">batgrl.logging.</span></span><span class="sig-name descname"><span class="pre">ANSI_LEVEL</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Final</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></span><a class="headerlink" href="#batgrl.logging.ANSI_LEVEL" title="Link to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">ANSI</span></code> log level.</p>
+<p>Show generated ANSI in logs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">batgrl.logging.</span></span><span class="sig-name descname"><span class="pre">CustomLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Logger</span></code></p>
+<p>A standard logger with methods for <code class="docutils literal notranslate"><span class="pre">ANSI</span></code> and <code class="docutils literal notranslate"><span class="pre">EVENTS</span></code> logging.</p>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>ansi(msg)</strong></p></td>
+<td><p>Log the given message with the severity <code class="docutils literal notranslate"><span class="pre">&quot;ANSI&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>events(msg)</strong></p></td>
+<td><p>Log the given message with the severity <code class="docutils literal notranslate"><span class="pre">&quot;EVENTS&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>is_enabled_for(log_level)</strong></p></td>
+<td><p>Similar to <code class="docutils literal notranslate"><span class="pre">Logger.isEnabledFor</span></code>, but also accepts level names.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.addFilter">
+<span class="sig-name descname"><span class="pre">addFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.addFilter" title="Link to this definition">#</a></dt>
+<dd><p>Add the specified filter to this handler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.addHandler">
+<span class="sig-name descname"><span class="pre">addHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdlr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.addHandler" title="Link to this definition">#</a></dt>
+<dd><p>Add the specified handler to this logger.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.ansi">
+<span class="sig-name descname"><span class="pre">ansi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#batgrl.logging.CustomLogger.ansi" title="Link to this definition">#</a></dt>
+<dd><p>Log the given message with the severity <code class="docutils literal notranslate"><span class="pre">&quot;ANSI&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.callHandlers">
+<span class="sig-name descname"><span class="pre">callHandlers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.callHandlers" title="Link to this definition">#</a></dt>
+<dd><p>Pass a record to all relevant handlers.</p>
+<p>Loop through all handlers for this logger and its parents in the
+logger hierarchy. If no handler was found, output a one-off error
+message to sys.stderr. Stop searching up the hierarchy whenever a
+logger with the “propagate” attribute set to zero is found - that
+will be the last logger whose handlers are called.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.critical">
+<span class="sig-name descname"><span class="pre">critical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.critical" title="Link to this definition">#</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘CRITICAL’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p>logger.critical(“Houston, we have a %s”, “major disaster”, exc_info=True)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.debug" title="Link to this definition">#</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘DEBUG’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p>logger.debug(“Houston, we have a %s”, “thorny problem”, exc_info=True)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.error" title="Link to this definition">#</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘ERROR’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p>logger.error(“Houston, we have a %s”, “major problem”, exc_info=True)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.events">
+<span class="sig-name descname"><span class="pre">events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#batgrl.logging.CustomLogger.events" title="Link to this definition">#</a></dt>
+<dd><p>Log the given message with the severity <code class="docutils literal notranslate"><span class="pre">&quot;EVENTS&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.exception">
+<span class="sig-name descname"><span class="pre">exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.exception" title="Link to this definition">#</a></dt>
+<dd><p>Convenience method for logging an ERROR with exception information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.fatal">
+<span class="sig-name descname"><span class="pre">fatal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.fatal" title="Link to this definition">#</a></dt>
+<dd><p>Don’t use this method, use critical() instead.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.filter" title="Link to this definition">#</a></dt>
+<dd><p>Determine if a record is loggable by consulting all the filters.</p>
+<p>The default is to allow the record to be logged; any filter can veto
+this by returning a false value.
+If a filter attached to a handler returns a log record instance,
+then that instance is used in place of the original log record in
+any further processing of the event by that handler.
+If a filter returns any other true value, the original log record
+is used in any further processing of the event by that handler.</p>
+<p>If none of the filters return false values, this method returns
+a log record.
+If any of the filters return a false value, this method returns
+a false value.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.2: </span>Allow filters to be just callables.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 3.12: </span>Allow filters to return a LogRecord instead of
+modifying it in place.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.findCaller">
+<span class="sig-name descname"><span class="pre">findCaller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stack_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stacklevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.findCaller" title="Link to this definition">#</a></dt>
+<dd><p>Find the stack frame of the caller so that we can note the source
+file name, line number and function name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.getChild">
+<span class="sig-name descname"><span class="pre">getChild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">suffix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.getChild" title="Link to this definition">#</a></dt>
+<dd><p>Get a logger which is a descendant to this one.</p>
+<p>This is a convenience method, such that</p>
+<p>logging.getLogger(‘abc’).getChild(‘def.ghi’)</p>
+<p>is the same as</p>
+<p>logging.getLogger(‘abc.def.ghi’)</p>
+<p>It’s useful, for example, when the parent logger is named using
+__name__ rather than a literal string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.getChildren">
+<span class="sig-name descname"><span class="pre">getChildren</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.getChildren" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.getEffectiveLevel">
+<span class="sig-name descname"><span class="pre">getEffectiveLevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.getEffectiveLevel" title="Link to this definition">#</a></dt>
+<dd><p>Get the effective level for this logger.</p>
+<p>Loop through this logger and its parents in the logger hierarchy,
+looking for a non-zero logging level. Return the first one found.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.handle">
+<span class="sig-name descname"><span class="pre">handle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.handle" title="Link to this definition">#</a></dt>
+<dd><p>Call the handlers for the specified record.</p>
+<p>This method is used for unpickled records received from a socket, as
+well as those created locally. Logger-level filtering is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.hasHandlers">
+<span class="sig-name descname"><span class="pre">hasHandlers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.hasHandlers" title="Link to this definition">#</a></dt>
+<dd><p>See if this logger has any handlers configured.</p>
+<p>Loop through all handlers for this logger and its parents in the
+logger hierarchy. Return True if a handler was found, else False.
+Stop searching up the hierarchy whenever a logger with the “propagate”
+attribute set to zero is found - that will be the last logger which
+is checked for the existence of handlers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.info" title="Link to this definition">#</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘INFO’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p>logger.info(“Houston, we have a %s”, “notable problem”, exc_info=True)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.isEnabledFor">
+<span class="sig-name descname"><span class="pre">isEnabledFor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.isEnabledFor" title="Link to this definition">#</a></dt>
+<dd><p>Is this logger enabled for level ‘level’?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.is_enabled_for">
+<span class="sig-name descname"><span class="pre">is_enabled_for</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#batgrl.logging.LogLevel" title="batgrl.logging.LogLevel"><span class="pre">LogLevel</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#batgrl.logging.CustomLogger.is_enabled_for" title="Link to this definition">#</a></dt>
+<dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">Logger.isEnabledFor</span></code>, but also accepts level names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.log">
+<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.log" title="Link to this definition">#</a></dt>
+<dd><p>Log ‘msg % args’ with the integer severity ‘level’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p>logger.log(level, “We have a %s”, “mysterious problem”, exc_info=True)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.makeRecord">
+<span class="sig-name descname"><span class="pre">makeRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sinfo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.makeRecord" title="Link to this definition">#</a></dt>
+<dd><p>A factory method which can be overridden in subclasses to create
+specialized LogRecords.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.manager">
+<span class="sig-name descname"><span class="pre">manager</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;logging.Manager</span> <span class="pre">object&gt;</span></span><a class="headerlink" href="#batgrl.logging.CustomLogger.manager" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.removeFilter">
+<span class="sig-name descname"><span class="pre">removeFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.removeFilter" title="Link to this definition">#</a></dt>
+<dd><p>Remove the specified filter from this handler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.removeHandler">
+<span class="sig-name descname"><span class="pre">removeHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hdlr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.removeHandler" title="Link to this definition">#</a></dt>
+<dd><p>Remove the specified handler from this logger.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.root">
+<span class="sig-name descname"><span class="pre">root</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;RootLogger</span> <span class="pre">root</span> <span class="pre">(WARNING)&gt;</span></span><a class="headerlink" href="#batgrl.logging.CustomLogger.root" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.setLevel">
+<span class="sig-name descname"><span class="pre">setLevel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.setLevel" title="Link to this definition">#</a></dt>
+<dd><p>Set the logging level of this logger.  level must be an int or a str.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.warn">
+<span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.warn" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="batgrl.logging.CustomLogger.warning">
+<span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.CustomLogger.warning" title="Link to this definition">#</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘WARNING’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p>logger.warning(“Houston, we have a %s”, “bit of a problem”, exc_info=True)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="batgrl.logging.EVENTS_LEVEL">
+<span class="sig-prename descclassname"><span class="pre">batgrl.logging.</span></span><span class="sig-name descname"><span class="pre">EVENTS_LEVEL</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Final</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></span><a class="headerlink" href="#batgrl.logging.EVENTS_LEVEL" title="Link to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">EVENTS</span></code> log level.</p>
+<p>Show generated input events.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="batgrl.logging.LogLevel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">batgrl.logging.</span></span><span class="sig-name descname"><span class="pre">LogLevel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#batgrl.logging.LogLevel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>Standard logging levels with additional <code class="docutils literal notranslate"><span class="pre">ANSI</span></code> and <code class="docutils literal notranslate"><span class="pre">EVENTS</span></code> levels.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="batgrl.logging.get_logger">
+<span class="sig-prename descclassname"><span class="pre">batgrl.logging.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#batgrl.logging.CustomLogger" title="batgrl.logging.CustomLogger"><span class="pre">CustomLogger</span></a></span></span><a class="headerlink" href="#batgrl.logging.get_logger" title="Link to this definition">#</a></dt>
+<dd><p>Return a logger with a specified name.</p>
+<p>Because there are several entry points into batgrl and default logging opens
+stderr/stdout which will disable batgrl output, all library logging must use this
+alias of <code class="docutils literal notranslate"><span class="pre">logging.getLogger</span></code> to ensure logging has been set to output to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str | None, default: None</span></dt><dd><p>Name of logger. If not specified, return the root logger.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>CustomLogger</dt><dd><p>The specified logger.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.ANSI_LEVEL"><code class="docutils literal notranslate"><span class="pre">ANSI_LEVEL</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger"><code class="docutils literal notranslate"><span class="pre">CustomLogger</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.addFilter"><code class="docutils literal notranslate"><span class="pre">CustomLogger.addFilter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.addHandler"><code class="docutils literal notranslate"><span class="pre">CustomLogger.addHandler()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.ansi"><code class="docutils literal notranslate"><span class="pre">CustomLogger.ansi()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.callHandlers"><code class="docutils literal notranslate"><span class="pre">CustomLogger.callHandlers()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.critical"><code class="docutils literal notranslate"><span class="pre">CustomLogger.critical()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.debug"><code class="docutils literal notranslate"><span class="pre">CustomLogger.debug()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.error"><code class="docutils literal notranslate"><span class="pre">CustomLogger.error()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.events"><code class="docutils literal notranslate"><span class="pre">CustomLogger.events()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.exception"><code class="docutils literal notranslate"><span class="pre">CustomLogger.exception()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.fatal"><code class="docutils literal notranslate"><span class="pre">CustomLogger.fatal()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.filter"><code class="docutils literal notranslate"><span class="pre">CustomLogger.filter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.findCaller"><code class="docutils literal notranslate"><span class="pre">CustomLogger.findCaller()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.getChild"><code class="docutils literal notranslate"><span class="pre">CustomLogger.getChild()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.getChildren"><code class="docutils literal notranslate"><span class="pre">CustomLogger.getChildren()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.getEffectiveLevel"><code class="docutils literal notranslate"><span class="pre">CustomLogger.getEffectiveLevel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.handle"><code class="docutils literal notranslate"><span class="pre">CustomLogger.handle()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.hasHandlers"><code class="docutils literal notranslate"><span class="pre">CustomLogger.hasHandlers()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.info"><code class="docutils literal notranslate"><span class="pre">CustomLogger.info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.isEnabledFor"><code class="docutils literal notranslate"><span class="pre">CustomLogger.isEnabledFor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.is_enabled_for"><code class="docutils literal notranslate"><span class="pre">CustomLogger.is_enabled_for()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.log"><code class="docutils literal notranslate"><span class="pre">CustomLogger.log()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.makeRecord"><code class="docutils literal notranslate"><span class="pre">CustomLogger.makeRecord()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.manager"><code class="docutils literal notranslate"><span class="pre">CustomLogger.manager</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.removeFilter"><code class="docutils literal notranslate"><span class="pre">CustomLogger.removeFilter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.removeHandler"><code class="docutils literal notranslate"><span class="pre">CustomLogger.removeHandler()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.root"><code class="docutils literal notranslate"><span class="pre">CustomLogger.root</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.setLevel"><code class="docutils literal notranslate"><span class="pre">CustomLogger.setLevel()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.warn"><code class="docutils literal notranslate"><span class="pre">CustomLogger.warn()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.CustomLogger.warning"><code class="docutils literal notranslate"><span class="pre">CustomLogger.warning()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.EVENTS_LEVEL"><code class="docutils literal notranslate"><span class="pre">EVENTS_LEVEL</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.LogLevel"><code class="docutils literal notranslate"><span class="pre">LogLevel</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#batgrl.logging.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/reference/generated/batgrl.logging.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, salt-die.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

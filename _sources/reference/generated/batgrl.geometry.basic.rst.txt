@@ -1,0 +1,24 @@
+batgrl.geometry.basic
+=====================
+
+.. automodule:: batgrl.geometry.basic
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      clamp
+      lerp
+      normalize
+      points_on_circle
+      rect_slice
+      round_down
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Point
+      Size
+   
