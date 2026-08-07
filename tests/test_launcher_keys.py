@@ -154,13 +154,16 @@ def test_down_arrow_moves_focus(app_with_cards):
 
 
 def test_up_arrow_moves_focus_back(app_with_cards):
-    """Up from the first card must wrap to the last."""
+    """Up from the first card must wrap to the last card in the same column."""
     app = app_with_cards
-    app.cards[0].focus()
+    app.cards[0].focus()  # col 0 row 0
     handled = app.root.dispatch_key(KeyEvent("up"))
     assert handled is True
     focused_idx = app.cards.index(next(c for c in app.cards if c.is_focused))
-    assert focused_idx == len(app.cards) - 1
+    # col 0 has 11 cards (rows 0..10), so wrap goes to row 10 = idx 10.
+    assert focused_idx == 10, (
+        f"Up from idx 0 should wrap to idx 10 (col 0 row 10), got {focused_idx}"
+    )
 
 
 def test_enter_signals_main_to_spawn_child(app_with_cards, monkeypatch):
@@ -277,14 +280,14 @@ def test_focused_card_uses_category_color(app_with_cards):
 
 
 def test_focused_card_renders_arrow_indicator(app_with_cards):
-    """A focused card's first line must include a selection arrow (``▶``)."""
+    """A focused card's row 1 must include a selection arrow (``▶``)."""
     app = app_with_cards
     card = app.cards[0]
     card.focus()
-    ords = card.canvas["ord"][0]
+    ords = card.canvas["ord"][1]
     first_line = "".join(chr(o) for o in ords.tolist())
     assert "\u25b6" in first_line, (
-        f"Focused card first line should contain the arrow indicator, got: {first_line!r}"
+        f"Focused card row 1 should contain the arrow indicator, got: {first_line!r}"
     )
 
 
@@ -520,4 +523,243 @@ def test_sidebar_shows_exit_keys_for_focused_game(app_with_cards):
     )
     assert tetris_card.game.exit_keys in text, (
         f"Sidebar should contain tetris exit_keys {tetris_card.game.exit_keys!r}, got: {text!r}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Card box border tests (Round 12)
+# ---------------------------------------------------------------------------
+
+
+_SINGLE_V = "\u2502"
+_DOUBLE_V = "\u2551"
+_BOX_CHARS = set("─━┌┐└┘╭╮╰╯├┤┬┴┼═║╔╗╚╝╠╣╦╩╬")
+
+
+def test_every_card_bottom_row_is_a_box_border(app_with_cards):
+    """The last row of each card must consist of box-drawing characters
+    forming a horizontal border (─, ━, etc.) plus optional corners."""
+    app = app_with_cards
+    bad = []
+    for c in app.cards:
+        bottom_row = c.canvas["ord"][c.size.height - 1]  # last row is the bottom border
+        text = "".join(chr(o) for o in bottom_row.tolist())
+        # Strip padding zeros so we can find non-padding chars.
+        visible = text.rstrip("\x00")
+        if not visible:
+            bad.append((c.game.id, "empty border row"))
+            continue
+        if not all((ch in _BOX_CHARS) or ch == "\x00" for ch in text):
+            bad.append((c.game.id, f"non-border chars: {visible[:40]!r}"))
+    assert not bad, f"Cards without proper border row: {bad}"
+
+
+def test_focused_card_border_visually_distinct(app_with_cards):
+    """The focused card's border must be visually distinct from the blurred
+    cards' borders. We compare the foreground color of the border row's
+    first non-empty cell."""
+    app = app_with_cards
+
+    def border_color(card) -> tuple:
+        # Pick the first cell of the border row whose fg_color is not the
+        # default (255, 255, 255).
+        fg = card.canvas["fg_color"][2]
+        for cell in fg:
+            t = tuple(int(x) for x in cell.tolist())
+            if t != (255, 255, 255):
+                return t
+        return tuple(int(x) for x in fg[0].tolist())
+
+    card = app.cards[0]
+    card.blur()
+    blurred_color = border_color(card)
+    card.focus()
+    focused_color = border_color(card)
+    assert focused_color != blurred_color, (
+        f"Focused card border color {focused_color!r} matches blurred "
+        f"{blurred_color!r}; focus state must be visually distinct."
+    )
+
+
+def test_card_text_does_not_overlap_border_row(app_with_cards):
+    """Top (row 0) and bottom (row 3) rows must be ONLY border chars + spaces;
+    the title row (row 1) and meta row (row 2) must start with a vertical edge char."""
+    app = app_with_cards
+    bad = []
+    for c in app.cards:
+        for r in (0, 3):
+            text = "".join(chr(o) for o in c.canvas["ord"][r].tolist() if o).rstrip()
+            non_box = [ch for ch in text if ch not in _BOX_CHARS]
+            if non_box:
+                bad.append((c.game.id, r, "non-border chars", non_box[:5]))
+                break
+        else:
+            for r in (1, 2):
+                row = "".join(chr(o) for o in c.canvas["ord"][r].tolist() if o)
+                if not (row.startswith(_SINGLE_V) or row.startswith(_DOUBLE_V)):
+                    bad.append((c.game.id, f"row{r} missing left edge", row[:30]))
+                    break
+    assert not bad, f"Text/border rows out of spec: {bad}"
+
+
+# ---------------------------------------------------------------------------
+# 3-column grid + full box border (Round 13)
+# ---------------------------------------------------------------------------
+
+
+def test_cards_are_arranged_in_three_columns(app_with_cards):
+    """Cards must occupy exactly 3 distinct x-positions (3 columns)."""
+    app = app_with_cards
+    xs = sorted({c.pos.x for c in app.cards})
+    assert len(xs) == 3, f"Expected 3 distinct x positions, got: {xs}"
+    # All 32 cards should have one of those x values.
+    for c in app.cards:
+        assert c.pos.x in xs, f"Card {c.game.id} at unexpected x={c.pos.x}"
+
+
+def test_every_card_has_full_box_border_on_all_four_sides(app_with_cards):
+    """Each card must have box-drawing characters on its left column (col 0)
+    and right column (col width-1) as well as its top row (row 0) and bottom
+    row (row height-1)."""
+    app = app_with_cards
+    bad = []
+    for c in app.cards:
+        h, w = c.size
+        # Left edge (col 0) and right edge (col w-1) should contain box chars.
+        left_col = "".join(chr(o) for o in c.canvas["ord"][:, 0].tolist() if o)
+        right_col = "".join(chr(o) for o in c.canvas["ord"][:, w - 1].tolist() if o)
+        top_row = "".join(chr(o) for o in c.canvas["ord"][0].tolist() if o)
+        bot_row = "".join(chr(o) for o in c.canvas["ord"][h - 1].tolist() if o)
+        for label, text in (
+            ("left", left_col),
+            ("right", right_col),
+            ("top", top_row),
+            ("bottom", bot_row),
+        ):
+            if not any(ch in _BOX_CHARS for ch in text):
+                bad.append((c.game.id, label, text[:40]))
+                break
+    assert not bad, f"Cards without full 4-sided box border: {bad}"
+
+
+_DOUBLE_LINE = set("═║╔╗╚╝╠╣╦╩")
+
+
+def test_focused_card_border_uses_double_line_chars(app_with_cards):
+    """The focused card's border must use double-line box-drawing characters
+    (═, ║, etc.) so it stands out from the blurred cards' single-line border."""
+    app = app_with_cards
+    card = app.cards[0]
+    card.focus()
+    # Sample 4 corners + middle of each edge.
+    samples = []
+    h, w = card.size
+    for y, x in (
+        (0, 0), (0, w - 1), (h - 1, 0), (h - 1, w - 1),
+        (0, w // 2), (h // 2, 0),
+    ):
+        ch = chr(int(card.canvas["ord"][y][x]))
+        samples.append(ch)
+    assert any(ch in _DOUBLE_LINE for ch in samples), (
+        f"Focused card should have at least one double-line border char "
+        f"(═, ║, ╔, etc.); samples were {samples!r}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# 4-row card + 4-direction navigation (Round 14)
+# ---------------------------------------------------------------------------
+
+
+def test_every_card_is_four_rows_tall(app_with_cards):
+    """Each GameCard must be 4 rows tall so title and meta each get a row."""
+    app = app_with_cards
+    bad = []
+    for c in app.cards:
+        if c.size.height != 4:
+            bad.append((c.game.id, c.size))
+    assert not bad, f"Cards not 4 rows tall: {bad}"
+
+
+def test_card_text_fits_within_width(app_with_cards):
+    """Row 1 (title) and row 2 (meta) must not contain content past col
+    ``width-1`` — every non-trailing-space char must be within the box.
+    """
+    app = app_with_cards
+    bad = []
+    for c in app.cards:
+        h, w = c.size
+        for r in (1, 2):
+            ords = c.canvas["ord"][r]
+            # The very last column must be a vertical edge char (│ or ║).
+            last_ch = chr(int(ords[w - 1]))
+            if last_ch not in (_SINGLE_V, _DOUBLE_V):
+                bad.append((c.game.id, r, f"col {w - 1} = {last_ch!r}"))
+    assert not bad, f"Cards whose row text overflows the box: {bad}"
+
+
+def test_title_row_contains_only_title_text(app_with_cards):
+    """Row 1 must not contain the controls hint ``[click]`` or dependency
+    marker ``⚠ ...`` — those belong to the meta row (row 2)."""
+    app = app_with_cards
+    bad = []
+    for c in app.cards:
+        row1 = "".join(chr(o) for o in c.canvas["ord"][1].tolist() if o)
+        # Strip the left/right edge + arrow + fav/recent stars and check no
+        # ``[`` or ``⚠`` survived (controls/deps).
+        stripped = row1.lstrip("│║ \u25b6\u2605\u25cf\u25cb").rstrip()
+        if "[" in stripped or "\u26a0" in stripped:
+            bad.append((c.game.id, row1[:60]))
+    assert not bad, f"Title row contains meta markers: {bad}"
+
+
+def test_left_key_navigates_to_left_card_with_wrap(app_with_cards):
+    """Pressing Left from col c row r focuses col c-1 row r, wrapping to col
+    max when at col 0."""
+    app = app_with_cards
+    # Move focus to a middle card first (card 13 is in col 1 row 1 with 11-per-col).
+    target_idx = 13
+    app.cards[target_idx].focus()
+    assert app.cards[target_idx].is_focused
+
+    handled = app.root.dispatch_key(KeyEvent("left"))
+    assert handled is True
+    focused = next(c for c in app.cards if c.is_focused)
+    expected_idx = target_idx - 11  # one col left = 11 cards earlier (column-major)
+    assert app.cards.index(focused) == expected_idx, (
+        f"Left from idx {target_idx} should focus idx {expected_idx}, "
+        f"got idx {app.cards.index(focused)}"
+    )
+
+    # From col 0 (idx 0 = col 0 row 0), Left should wrap to col max row 0 = idx 22.
+    app.cards[0].focus()
+    app.root.dispatch_key(KeyEvent("left"))
+    focused = next(c for c in app.cards if c.is_focused)
+    assert app.cards.index(focused) == 22, (
+        f"Left from idx 0 should wrap to idx 22, got {app.cards.index(focused)}"
+    )
+
+
+def test_right_key_navigates_to_right_card_with_wrap(app_with_cards):
+    """Pressing Right mirrors the Left test."""
+    from examples.demos import launcher as launcher_mod
+
+    app = app_with_cards
+    launcher_mod._PENDING_GAME["value"] = None  # guard against accidental exit
+
+    # From a middle card (idx 13, col 1 row 1), Right should go to idx 24 (col 2 row 1).
+    app.cards[13].focus()
+    handled = app.root.dispatch_key(KeyEvent("right"))
+    assert handled is True
+    focused = next(c for c in app.cards if c.is_focused)
+    assert app.cards.index(focused) == 24, (
+        f"Right from idx 13 should focus idx 24, got {app.cards.index(focused)}"
+    )
+
+    # From col max (idx 22 = col 2 row 0), Right should wrap to col 0 row 0 = idx 0.
+    app.cards[22].focus()
+    app.root.dispatch_key(KeyEvent("right"))
+    focused = next(c for c in app.cards if c.is_focused)
+    assert app.cards.index(focused) == 0, (
+        f"Right from idx 22 should wrap to idx 0, got {app.cards.index(focused)}"
     )

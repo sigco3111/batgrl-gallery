@@ -15,9 +15,9 @@ Key dispatch notes
 batgrl routes key events through ``App.root.dispatch_key`` - the gadget tree
 itself, not the ``App`` instance. Only the focused gadget receives key events,
 so each ``GameCard`` handles its own ``Up``/``Down``/``Enter``/``L``/``Esc``.
-Cards are linked through their ``prev_card``/``next_card`` attributes so
-navigation is local and does not rely on the global focus traversal order
-(which would also include the header/footer text gadgets).
+Cards know their 4 neighbors (``left_card``/``right_card``/
+``up_card``/``down_card``) computed from the grid coordinates. Navigation wraps
+around at row and column edges.
 """
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ from batgrl.app import App
 from batgrl.colors import BLACK, Color, WHITE
 from batgrl.gadgets.behaviors.focusable import Focusable
 from batgrl.gadgets.gadget import Gadget
-from batgrl.gadgets.stack_layout import VStackLayout
+from batgrl.gadgets.grid_layout import GridLayout
 from batgrl.gadgets.text import Text
 
 from examples.demos import storage
@@ -150,12 +150,94 @@ def _recent_marker(game_id: str) -> str:
     return ""
 
 
-def _format_card_lines(game: GameInfo, focused: bool = False) -> list[str]:
-    """Render a game's two display lines in the active locale.
+# Box-drawing characters for a single-line card border (blurred cards).
+_SINGLE_H = "\u2500"             # ─
+_SINGLE_V = "\u2502"             # │
+_SINGLE_TL = "\u250c"            # ┌
+_SINGLE_TR = "\u2510"            # ┐
+_SINGLE_BL = "\u2514"            # └
+_SINGLE_BR = "\u2518"            # ┘
 
-    When ``focused``, prepend a selection arrow on the title line and append
-    the controls hint and dependency marker so the user sees them at a glance.
-    Favorite and recent markers appear next to the title.
+# Box-drawing characters for a double-line card border (focused cards).
+_DOUBLE_H = "\u2550"             # ═
+_DOUBLE_V = "\u2551"             # ║
+_DOUBLE_TL = "\u2554"            # ╔
+_DOUBLE_TR = "\u2557"            # ╗
+_DOUBLE_BL = "\u255a"            # ╚
+_DOUBLE_BR = "\u255d"            # ╝
+
+
+def _format_card_box(width: int, height: int, focused: bool = False) -> tuple[list[str], Color]:
+    """Return (rows, border_color) for a full 4-sided box of (height, width).
+
+    Each row is exactly ``width`` cells. Border chars are on all 4 edges:
+    corners on rows 0 and ``height - 1``, vertical strokes on the leftmost and
+    rightmost columns of every intermediate row. Focused cards use the double
+    line; blurred cards use the single line. Inside the box is filled with
+    spaces so the rest of the card's content can be written over it.
+    """
+    if focused:
+        h, v, tl, tr, bl, br = (_DOUBLE_H, _DOUBLE_V, _DOUBLE_TL, _DOUBLE_TR, _DOUBLE_BL, _DOUBLE_BR)
+        color = WHITE
+    else:
+        h, v, tl, tr, bl, br = (_SINGLE_H, _SINGLE_V, _SINGLE_TL, _SINGLE_TR, _SINGLE_BL, _SINGLE_BR)
+        color = Color(140, 140, 160)
+    top = tl + (h * (width - 2)) + tr
+    bot = bl + (h * (width - 2)) + br
+    middle = v + (" " * (width - 2)) + v
+    rows = [top] + [middle] * (height - 2) + [bot]
+    return rows, color
+
+
+def _format_card_lines(
+    game: GameInfo,
+    focused: bool = False,
+    width: int = 80,
+    height: int = 4,
+) -> tuple[list[str], Color, Color]:
+    """Render the card's rows with full 4-sided box border.
+
+    Returns ``(rows, text_color, border_color)``. For a 4-row card:
+      row 0: top border
+      row 1: title (▶ title + ★ + ● markers)
+      row 2: meta line ([controls] + ⚠ missing)
+      row 3: bottom border
+
+    The card width is 26 cols; with 2 vertical edges + arrow/markers, the
+    title row fits ~20 chars, the meta row fits ~22 chars. Anything longer is
+    truncated by ljust+[:width].
+    """
+    if _LANG["current"] == "ko":
+        title = game.title_ko
+    else:
+        title = game.title
+    arrow = f"{_ARROW} " if focused else "  "
+    fav = " ★" if game.id in _FAVORITES else ""
+    recent = f" {_recent_marker(game.id)}" if _recent_marker(game.id) else ""
+    meta = f"[{game.controls}]"
+    if game.deps_status != "ok":
+        missing = game.deps_status.split(":", 1)[-1].strip()
+        meta += f" ⚠ {missing}"
+    text_color = WHITE
+    border_rows, border_color = _format_card_box(width, height, focused=focused)
+    v_edge = _DOUBLE_V if focused else _SINGLE_V
+    rows = list(border_rows)
+    # Build title/meta rows. Each row uses left edge + content + right edge,
+    # but the Korean character shifts the display width by 1, so the right
+    # edge is added as a separate string so batgrl doesn't truncate it.
+    title_content = f" {arrow}{title}{fav}{recent} "
+    rows[1] = v_edge + title_content
+    meta_content = f" {meta} "
+    rows[2] = v_edge + meta_content
+    # For taller cards (height >= 5), blank rows between row 2 and bottom.
+    if height >= 5:
+        for r in range(3, height - 1):
+            rows[r] = v_edge + (" " * (width - 2)) + v_edge
+    return rows, text_color, border_color
+    """Render the card's rows with full 4-sided box border.
+
+    Returns ``(rows, text_color, border_color)``. Rows: top border, title row,
+    bottom border (height=3). For taller cards, description goes in row 2.
     """
     if _LANG["current"] == "ko":
         title = game.title_ko
@@ -168,35 +250,69 @@ def _format_card_lines(game: GameInfo, focused: bool = False) -> list[str]:
     recent = f"  {_recent_marker(game.id)}" if _recent_marker(game.id) else ""
     controls = f"  [{game.controls}]"
     if game.deps_status != "ok":
-        # Short marker so the user sees the issue without a long error string.
         missing = game.deps_status.split(":", 1)[-1].strip()
-        controls += f"  ⚠ {missing}"
-    line1 = f"{arrow}{title}{fav}{recent}{controls}"
-    line2 = f"    {desc}"
-    return [line1, line2]
+        controls += f"  \u26a0 {missing}"
+    text_color = WHITE
+    border_rows, border_color = _format_card_box(width, height, focused=focused)
+    # Vertical edge character depends on focus state for the inside rows.
+    v_edge = _DOUBLE_V if focused else _SINGLE_V
+    rows = list(border_rows)
+    # For taller cards (height >= 5), blank rows between row 2 and bottom.
+    if height >= 5:
+        for r in range(3, height - 1):
+            rows[r] = v_edge + (" " * (width - 2)) + v_edge
+    return rows, text_color, border_color
 
 
 class GameCard(Focusable, Text):
-    """One row in the catalog list. Handles its own navigation keys."""
+    """One cell in the 3-column catalog grid. Handles its own navigation keys.
+
+    Layout (4 rows, width 26):
+      row 0: top border (┌──...──┐ / ╔══...══╗)
+      row 1: title (▶ title  ★ ●)
+      row 2: meta line ([controls]  ⚠ missing)
+      row 3: bottom border (└──...──┘ / �══...══╝)
+
+    Four-direction neighbors (left_card/right_card/up_card/down_card) are set
+    by GalleryApp.on_start so Up/Down/Left/Right wrap around grid edges.
+    """
 
     def __init__(
         self,
         game: GameInfo,
-        prev_card: "GameCard | None" = None,
-        next_card: "GameCard | None" = None,
+        left_card: "GameCard | None" = None,
+        right_card: "GameCard | None" = None,
+        up_card: "GameCard | None" = None,
+        down_card: "GameCard | None" = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.game = game
-        self.prev_card = prev_card
-        self.next_card = next_card
+        self.left_card = left_card
+        self.right_card = right_card
+        self.up_card = up_card
+        self.down_card = down_card
         self._apply_text()
 
     def _apply_text(self) -> None:
         self.clear()
-        line1, line2 = _format_card_lines(self.game, focused=self.is_focused)
-        self.add_str(line1)
-        self.add_str(line2, pos=(1, 0))
+        rows, text_color, border_color = _format_card_lines(
+            self.game,
+            focused=self.is_focused,
+            width=self.size.width,
+            height=self.size.height,
+        )
+        v_edge = _DOUBLE_V if self.is_focused else _SINGLE_V
+        for r, row_text in enumerate(rows):
+            # Add the row text. For non-border rows the trailing v_edge
+            # would be truncated when content contains wide (Korean) chars,
+            # so we explicitly set canvas col (width-1) to the edge char.
+            self.add_str(
+                row_text, pos=(r, 0), fg_color=border_color, truncate_str=True
+            )
+            if 0 < r < self.size.height - 1:
+                self.canvas["ord"][r][self.size.width - 1] = ord(v_edge)
+                self.canvas["fg_color"][r][self.size.width - 1] = border_color
 
     def on_focus(self) -> None:
         cat = self.game.category
@@ -217,14 +333,9 @@ class GameCard(Focusable, Text):
 
     def _toggle_language(self) -> None:
         _LANG["current"] = "en" if _LANG["current"] == "ko" else "ko"
-        # Re-render every card's text in the new locale by walking the chain.
-        head = self
-        while head.prev_card is not None:
-            head = head.prev_card
-        cur = head
-        while cur is not None:
-            cur._apply_text()
-            cur = cur.next_card
+        # Re-render every card by iterating the app's cards list directly.
+        for card in self.app.cards:
+            card._apply_text()
         # Refresh header + footer in the new locale.
         self.app._refresh_header(self.app.header)
         self.app._refresh_footer(self.app.footer)
@@ -302,24 +413,20 @@ class GameCard(Focusable, Text):
             self.app.exit()
             return True
         if key == "up":
-            if self.prev_card is not None:
-                self.prev_card.focus()
-            else:
-                # Wrap to last card.
-                cur = self
-                while cur.next_card is not None:
-                    cur = cur.next_card
-                cur.focus()
+            if self.up_card is not None:
+                self.up_card.focus()
             return True
         if key == "down":
-            if self.next_card is not None:
-                self.next_card.focus()
-            else:
-                # Wrap to first card.
-                cur = self
-                while cur.prev_card is not None:
-                    cur = cur.prev_card
-                cur.focus()
+            if self.down_card is not None:
+                self.down_card.focus()
+            return True
+        if key == "left":
+            if self.left_card is not None:
+                self.left_card.focus()
+            return True
+        if key == "right":
+            if self.right_card is not None:
+                self.right_card.focus()
             return True
         return None
 
@@ -340,25 +447,59 @@ class GalleryApp(App):
         self.title = labels()["app_title"]
 
         self.cards: list[GameCard] = []
+        # Layout constants: 3-column grid, each card is (CARD_H, CARD_W).
+        # CARD_H = 4 to fit top border / title row / meta row / bottom border.
+        self.num_columns = 3
+        self.card_rows = (len(GAMES) + self.num_columns - 1) // self.num_columns  # ceil
+        CARD_W = 80 // self.num_columns  # 26
+        CARD_H = 4
+
         for i, game in enumerate(GAMES):
-            card = GameCard(game, size=(2, 80))
+            card = GameCard(game, size=(CARD_H, CARD_W))
             self.cards.append(card)
-        # Wire prev/next so Up/Down navigation works locally.
+        # Wire 4-direction neighbors from grid coordinates (column-major fill
+        # matching the GridLayout orientation).
+        n = len(self.cards)
+        rows = self.card_rows
+        cols = self.num_columns
         for i, card in enumerate(self.cards):
-            card.prev_card = self.cards[i - 1] if i > 0 else None
-            card.next_card = self.cards[i + 1] if i + 1 < len(self.cards) else None
+            # GridLayout is column-major: cards 0..rows-1 fill col 0,
+            # cards rows..2*rows-1 fill col 1, etc.
+            col = i // rows
+            row = i % rows
+            # left: prev col in same row (wrap to last col if col == 0)
+            left_col = (col - 1) % cols
+            left_idx = left_col * rows + row
+            card.left_card = self.cards[left_idx] if left_idx < n else None
+            # right
+            right_col = (col + 1) % cols
+            right_idx = right_col * rows + row
+            card.right_card = self.cards[right_idx] if right_idx < n else None
+            # up
+            up_row = (row - 1) % rows
+            up_idx = col * rows + up_row
+            card.up_card = self.cards[up_idx] if up_idx < n else None
+            # down
+            down_row = (row + 1) % rows
+            down_idx = col * rows + down_row
+            card.down_card = self.cards[down_idx] if down_idx < n else None
 
         self.header = Text(size=(1, 80), pos=(0, 0))
         self._refresh_header(self.header)
 
-        stack = VStackLayout(
-            size=(2 * len(self.cards), 80), pos=(2, 0), is_transparent=True
+        stack = GridLayout(
+            grid_rows=self.card_rows,
+            grid_columns=self.num_columns,
+            orientation="tb-lr",
+            size=(CARD_H * self.card_rows, 80),
+            pos=(2, 0),
+            is_transparent=True,
         )
         for card in self.cards:
             stack.add_gadget(card)
         self.stack = stack
 
-        # Sidebar on the right (cols 80..160). Two-row header + this sidebar.
+        # Sidebar on the right (cols 80..160).
         self.sidebar = Text(size=(40, 40), pos=(2, 82))
 
         self.footer = Text(size=(1, 80), pos=(-1, 0))
